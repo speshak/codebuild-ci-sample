@@ -4,6 +4,7 @@ import os
 import json
 import sys
 codebuild = boto3.client('codebuild')
+AWS_REGION = os.environ['AWS_REGION']
 
 
 def handler(event, context):
@@ -39,7 +40,7 @@ def handler(event, context):
                 status = repository.create_status(
                   sha=head_sha,
                   state="pending",
-                  target_url="https://us-west-2.console.aws.amazon.com/codebuild/home?region=us-west-2#/builds/" + build_id + "/view/new",
+                  target_url="https://" + AWS_REGION + ".console.aws.amazon.com/codebuild/home?region=" + AWS_REGION + "#/builds/" + build_id + "/view/new",
                   description="Build is running...",
                   context="CodeBuild"
                 )
@@ -67,7 +68,7 @@ def handler(event, context):
             result = repository.create_status(
               sha=sha,
               state=state[status],
-              target_url="https://us-west-2.console.aws.amazon.com/codebuild/home?region=us-west-2#/builds/" + build_id + "/view/new",
+              target_url="https://" + AWS_REGION + ".console.aws.amazon.com/codebuild/home?region=" + AWS_REGION + "#/builds/" + build_id + "/view/new",
               description="Build was a " + state[status] + ".",
               context="CodeBuild"
             )
